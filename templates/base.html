@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Solid Web App{% endblock %}</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/dashboard">Dashboard Analitik</a></li>
+        </ul>
+    </nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
