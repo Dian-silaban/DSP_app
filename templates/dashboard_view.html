@@ -1,15 +1,108 @@
 {% extends "base.html" %}
 {% block title %}Predict Attrition{% endblock %}
+
 {% block content %}
-<h1>Laporan Analitik Produk</h1>
-<div class="dashboard-container">
+<div class="glass-wrapper">
+  <div class="glass-card">
+    <h1 class="title">Laporan Analitik Produk</h1>
     <div class="iframe-wrapper">
-        <iframe width="600" height="443" 
-                src="https://lookerstudio.google.com/embed/reporting/3efa4f5e-bcc9-401a-9e85-0e586c5f5a48/page/GMUYF" 
-                frameborder="0" 
-                style="border:0" 
-                allowfullscreen>
-        </iframe>
+      <iframe
+        src="https://lookerstudio.google.com/embed/reporting/3efa4f5e-bcc9-401a-9e85-0e586c5f5a48/page/GMUYF"
+        allowfullscreen
+      ></iframe>
     </div>
+  </div>
 </div>
+
+<style>
+  /* ===== Glassmorphism Background ===== */
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #c9d6ff 0%, #e2e2e2 100%);
+    font-family: 'Inter', sans-serif;
+    color: #1f2937;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* ===== Wrapper & Card ===== */
+  .glass-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 2rem;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 20px;
+    padding: 2.5rem 3rem;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    text-align: center;
+    transition: all 0.4s ease;
+  }
+
+  .glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(31, 38, 135, 0.25);
+  }
+
+  /* ===== Title ===== */
+  .title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.5px;
+  }
+
+  /* ===== Iframe Styling ===== */
+  .iframe-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  iframe {
+    width: 1000px;
+    height: 560px;
+    border-radius: 16px;
+    border: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+  }
+
+  iframe:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 1200px) {
+    iframe {
+      width: 90%;
+      height: 520px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    iframe {
+      width: 100%;
+      height: 420px;
+    }
+    .glass-card {
+      width: 95%;
+      padding: 1.5rem;
+    }
+    .title {
+      font-size: 1.6rem;
+    }
+  }
+</style>
 {% endblock %}

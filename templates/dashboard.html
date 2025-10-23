@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dasbor Prediksi Attrition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .main-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+        .form-section {
+            padding: 48px;
+            /* Tambahkan ini untuk scrolling jika form terlalu panjang */
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+        .result-section {
+            background-color: #f8fafc;
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+             /* Tambahkan ini untuk scrolling jika konten terlalu panjang */
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+        .slider-value {
+            font-weight: 500;
+            color: #4f46e5;
+        }
+        .submit-btn {
+            background: linear-gradient(90deg, #4f46e5, #818cf8);
+            transition: all 0.3s ease;
+        }
+        .submit-btn:hover {
+            box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4);
+            transform: translateY(-2px);
+        }
+        .loader {
+            border: 5px solid #e2e8f0;
+            border-top: 5px solid #4f46e5;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+            .main-card {
+                grid-template-columns: 1fr;
+                max-height: 100vh;
+            }
+             .form-section, .result-section {
+                max-height: none; /* Nonaktifkan di mobile */
+                overflow-y: visible;
+            }
+            .result-section {
+                padding-top: 24px;
+            }
+        }
+        /* Style untuk kartu baru */
+        .key-factors-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 24px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        .key-factors-list li {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .key-factors-list li:last-child {
+            border-bottom: none;
+        }
+        .factor-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-4xl main-card">
+        <!-- Bagian Form -->
+        <div class="form-section">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Analisis Risiko Karyawan</h1>
+            
+            <form id="attrition-form" class="space-y-6">
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label for="MonthlyIncome" class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-dollar-sign mr-2 text-indigo-500"></i>Pendapatan Bulanan</label>
+                        <input type="number" name="MonthlyIncome" id="MonthlyIncome" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="5000000" required>
+                    </div>
+                    <div>
+                        <label for="Age" class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-birthday-cake mr-2 text-indigo-500"></i>Usia</label>
+                        <input type="number" name="Age" id="Age" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="35" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label for="TotalWorkingYears" class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-briefcase mr-2 text-indigo-500"></i>Total Tahun Bekerja</label>
+                        <input type="number" name="TotalWorkingYears" id="TotalWorkingYears" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="10" required>
+                    </div>
+                    <div>
+                        <label for="YearsAtCompany" class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-building mr-2 text-indigo-500"></i>Tahun di Perusahaan</label>
+                        <input type="number" name="YearsAtCompany" id="YearsAtCompany" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="5" required>
+                    </div>
+                </div>
+
+                <!-- --- INPUT BARU DITAMBAHKAN DI SINI --- -->
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label for="DailyRate" class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-calendar-day mr-2 text-indigo-500"></i>Gaji Harian (Rate)</label>
+                        <input type="number" name="DailyRate" id="DailyRate" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="800" required>
+                    </div>
+                    <div>
+                        <label for="MonthlyRate" class="block text-sm font-medium text-gray-700 mb-1"><i class="fas fa-calendar-alt mr-2 text-indigo-500"></i>Gaji Bulanan (Rate)</label>
+                        <input type="number" name="MonthlyRate" id="MonthlyRate" class="mt-1 block w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" placeholder="15000" required>
+                    </div>
+                </div>
+                <!-- --- AKHIR INPUT BARU --- -->
+
+                <div>
+                    <label for="JobLevel" class="flex justify-between text-sm font-medium text-gray-700 mb-1">
+                        <span><i class="fas fa-layer-group mr-2 text-indigo-500"></i>Level Jabatan</span>
+                        <span id="JobLevelValue" class="slider-value">2</span>
+                    </label>
+                    <input type="range" name="JobLevel" id="JobLevel" min="1" max="5" value="2" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                </div>
+
+                <div>
+                    <label for="EnvironmentSatisfaction" class="flex justify-between text-sm font-medium text-gray-700 mb-1">
+                        <span><i class="fas fa-leaf mr-2 text-indigo-500"></i>Kepuasan Lingkungan</span>
+                        <span id="EnvironmentSatisfactionValue" class="slider-value">3</span>
+                    </label>
+                    <input type="range" name="EnvironmentSatisfaction" id="EnvironmentSatisfaction" min="1" max="4" value="3" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                </div>
+                
+                <div>
+                     <label for="JobInvolvement" class="flex justify-between text-sm font-medium text-gray-700 mb-1">
+                        <span><i class="fas fa-puzzle-piece mr-2 text-indigo-500"></i>Keterlibatan Kerja</span>
+                        <span id="JobInvolvementValue" class="slider-value">3</span>
+                    </label>
+                    <input type="range" name="JobInvolvement" id="JobInvolvement" min="1" max="4" value="3" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                </div>
+
+                <div>
+                    <label for="OverTime" class="block text-sm font-medium text-gray-700 mb-2"><i class="fas fa-clock mr-2 text-indigo-500"></i>Kerja Lembur (Overtime)</label>
+                    <div class="flex items-center space-x-4">
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="OverTime" value="0" class="hidden peer" checked>
+                            <span class="px-6 py-2 rounded-lg border border-gray-300 peer-checked:bg-indigo-500 peer-checked:text-white peer-checked:border-indigo-500 transition">Tidak</span>
+                        </label>
+                        <label class="flex items-center cursor-pointer">
+                            <input type="radio" name="OverTime" value="1" class="hidden peer">
+                            <span class="px-6 py-2 rounded-lg border border-gray-300 peer-checked:bg-red-500 peer-checked:text-white peer-checked:border-red-500 transition">Ya</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" id="submit-button" class="w-full inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-md text-white submit-btn">
+                        Analisis Risiko
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Bagian Hasil -->
+        <div id="result-section" class="result-section space-y-8">
+            <div id="initial-state" class="text-center w-full">
+                <i class="fas fa-chart-line text-7xl text-indigo-300"></i>
+                <h2 class="mt-6 text-2xl font-bold text-gray-700">Menunggu Analisis</h2>
+                <p class="text-gray-500 mt-2">Hasil prediksi risiko atrisi akan ditampilkan di sini.</p>
+            </div>
+            <div id="loading-state" class="text-center w-full hidden">
+                <div class="loader mx-auto"></div>
+                <p class="text-gray-600 mt-4 font-medium">Menganalisis data...</p>
+            </div>
+            <div id="result-state" class="text-center w-full hidden">
+                <canvas id="gauge-chart" width="220" height="220"></canvas>
+                <h2 id="result-title" class="text-2xl font-bold mt-4"></h2>
+                <p id="result-description" class="text-gray-600 mt-1 max-w-xs mx-auto"></p>
+            </div>
+
+            <!-- --- KARTU FAKTOR DIPERBARUI (SEKARANG 10 ITEM) --- -->
+            <div id="key-factors-card" class="key-factors-card w-full">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-key mr-3 text-indigo-500"></i>
+                    Faktor Attrisi Utama
+                </h3>
+                <p class="text-sm text-gray-500 mb-4">
+                    Berdasarkan analisis model, 10 faktor berikut memiliki pengaruh terbesar:
+                </p>
+                <ul class="key-factors-list text-sm text-gray-700 space-y-2">
+                    <li>
+                        <span class="factor-icon bg-red-100 text-red-600"><i class="fas fa-dollar-sign"></i></span>
+                        Pendapatan Bulanan (MonthlyIncome)
+                    </li>
+                    <li>
+                        <span class="factor-icon bg-orange-100 text-orange-600"><i class="fas fa-clock"></i></span>
+                        Kerja Lembur (OverTime_Yes)
+                    </li>
+                    <li>
+                        <span class="factor-icon bg-blue-100 text-blue-600"><i class="fas fa-briefcase"></i></span>
+                        Total Tahun Bekerja (TotalWorkingYears)
+                    </li>
+                    <li>
+                        <span class="factor-icon bg-green-100 text-green-600"><i class="fas fa-leaf"></i></span>
+                        Kepuasan Lingkungan (EnvironmentSatisfaction)
+                    </li>
+                    <li>
+                        <span class="factor-icon bg-purple-100 text-purple-600"><i class="fas fa-puzzle-piece"></i></span>
+                        Keterlibatan Kerja (JobInvolvement)
+                    </li>
+                    <li>
+                        <span class="factor-icon bg-yellow-100 text-yellow-600"><i class="fas fa-birthday-cake"></i></span>
+                        Usia (Age)
+                    </li>
+                     <li>
+                        <span class="factor-icon bg-indigo-100 text-indigo-600"><i class="fas fa-building"></i></span>
+                        Tahun di Perusahaan (YearsAtCompany)
+                    </li>
+                     <li>
+                        <span class="factor-icon bg-gray-100 text-gray-600"><i class="fas fa-calendar-day"></i></span>
+                        Gaji Harian (DailyRate)
+                    </li>
+                     <li>
+                        <span class="factor-icon bg-gray-100 text-gray-600"><i class="fas fa-calendar-alt"></i></span>
+                        Gaji Bulanan (MonthlyRate)
+                    </li>
+                     <li>
+                        <span class="factor-icon bg-teal-100 text-teal-600"><i class="fas fa-layer-group"></i></span>
+                        Level Jabatan (JobLevel)
+                    </li>
+                </ul>
+            </div>
+            <!-- --- AKHIR KARTU BARU --- -->
+
+        </div>
+    </div>
+
+    <script>
+        // Setup Elemen UI
+        const form = document.getElementById('attrition-form');
+        const submitButton = document.getElementById('submit-button');
+        const initialState = document.getElementById('initial-state');
+        const loadingState = document.getElementById('loading-state');
+        const resultState = document.getElementById('result-state');
+        const resultTitle = document.getElementById('result-title');
+        const resultDescription = document.getElementById('result-description');
+        const resultSection = document.getElementById('result-section');
+        const keyFactorsCard = document.getElementById('key-factors-card');
+
+        // Setup Slider
+        const sliders = [
+            { id: 'EnvironmentSatisfaction', valueId: 'EnvironmentSatisfactionValue' },
+            { id: 'JobInvolvement', valueId: 'JobInvolvementValue' },
+            { id: 'JobLevel', valueId: 'JobLevelValue' } 
+        ];
+        sliders.forEach(slider => {
+            const sliderEl = document.getElementById(slider.id);
+            const valueEl = document.getElementById(slider.valueId);
+            sliderEl.addEventListener('input', () => valueEl.textContent = sliderEl.value);
+        });
+
+        // URL server back-end
+        const API_URL = 'http://127.0.0.1:5000/predict';
+        
+        // Setup Canvas untuk Gauge
+        const canvas = document.getElementById('gauge-chart');
+        const ctx = canvas.getContext('2d');
+        
+        // Sembunyikan kartu hasil & faktor pada awalnya
+        resultState.classList.add('hidden');
+        keyFactorsCard.classList.add('hidden');
+
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            initialState.classList.add('hidden');
+            resultState.classList.add('hidden');
+            keyFactorsCard.classList.add('hidden'); 
+            loadingState.classList.remove('hidden');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Menganalisis...';
+            
+            // Mengumpulkan data form, termasuk slider dan radio
+            const formData = new FormData(form);
+            const data = {
+                MonthlyIncome: Number(formData.get('MonthlyIncome')),
+                Age: Number(formData.get('Age')),
+                TotalWorkingYears: Number(formData.get('TotalWorkingYears')),
+                EnvironmentSatisfaction: Number(formData.get('EnvironmentSatisfaction')),
+                JobInvolvement: Number(formData.get('JobInvolvement')),
+                OverTime: Number(formData.get('OverTime')),
+                YearsAtCompany: Number(formData.get('YearsAtCompany')), 
+                JobLevel: Number(formData.get('JobLevel')),
+                // --- PERUBAHAN DI SINI ---
+                // Ambil nilai dari input baru
+                DailyRate: Number(formData.get('DailyRate')),
+                MonthlyRate: Number(formData.get('MonthlyRate'))
+            };
+
+            // Validasi input sederhana
+            if (!data.MonthlyIncome || !data.Age || !data.TotalWorkingYears || !data.YearsAtCompany || !data.DailyRate || !data.MonthlyRate) {
+                // Gunakan dialog kustom, bukan alert()
+                displayError('Gagal Validasi', 'Mohon isi semua field numerik yang wajib diisi (Pendapatan, Usia, Rate, dll).');
+                loadingState.classList.add('hidden');
+                initialState.classList.remove('hidden'); 
+                submitButton.disabled = false;
+                submitButton.textContent = 'Analisis Risiko';
+                return;
+            }
+
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                const result = await response.json();
+                displayResult(result.attrition_probability);
+
+            } catch (error) {
+                console.error("Fetch error:", error);
+                displayError('Terjadi Kesalahan', 'Gagal terhubung ke server prediksi. Pastikan server app.py berjalan.');
+            } finally {
+                loadingState.classList.add('hidden');
+                submitButton.disabled = false;
+                submitButton.textContent = 'Analisis Risiko';
+            }
+        });
+
+        function displayResult(probability) {
+            resultState.classList.remove('hidden');
+            keyFactorsCard.classList.remove('hidden'); // Tampilkan kartu faktor
+            let riskLevel, description, color;
+
+            if (probability > 60) {
+                riskLevel = "TINGGI";
+                description = "Karyawan ini memiliki kemungkinan besar untuk resign. Perlu perhatian khusus.";
+                color = "#ef4444"; // red-500
+                resultSection.style.backgroundColor = "#fee2e2"; // red-100
+            } else if (probability > 30) {
+                riskLevel = "SEDANG";
+                description = "Ada beberapa faktor risiko terdeteksi. Sebaiknya dilakukan pemantauan.";
+                color = "#f59e0b"; // amber-500
+                resultSection.style.backgroundColor = "#fef3c7"; // amber-100
+            } else {
+                riskLevel = "RENDAH";
+                description = "Karyawan ini kemungkinan besar akan tetap loyal pada perusahaan.";
+                color = "#22c55e"; // green-500
+                resultSection.style.backgroundColor = "#dcfce7"; // green-100
+            }
+            
+            resultTitle.textContent = `Risiko Attrition: ${riskLevel}`;
+            resultTitle.style.color = color;
+            resultDescription.textContent = description;
+
+            drawGauge(probability, color);
+        }
+
+        function displayError(title, message) {
+            resultState.classList.remove('hidden');
+            keyFactorsCard.classList.add('hidden'); // Sembunyikan kartu faktor saat error
+            resultSection.style.backgroundColor = '#e5e7eb';
+            resultTitle.textContent = title;
+            resultTitle.style.color = '#4b5563';
+            resultDescription.textContent = message;
+            drawGauge(0, '#9ca3af');
+        }
+
+
+
+        function drawGauge(percentage, color) {
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 85;
+            const startAngle = 0.75 * Math.PI;
+            const endAngle = 2.25 * Math.PI;
+            
+            // Menghitung sudut untuk persentase
+            const percentageAngle = startAngle + (percentage / 100) * (endAngle - startAngle);
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Gambar busur latar belakang
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+            ctx.lineWidth = 20;
+            ctx.strokeStyle = '#e5e7eb';
+            ctx.lineCap = 'round';
+            ctx.stroke();
+
+            // Gambar busur persentase
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, startAngle, percentageAngle);
+            ctx.lineWidth = 20;
+            ctx.strokeStyle = color;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+
+            // Tampilkan teks persentase
+            ctx.fillStyle = color;
+            ctx.font = 'bold 48px Inter';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(`${percentage.toFixed(1)}%`, centerX, centerY);
+        }
+
+        // Tampilkan kartu faktor saat halaman dimuat
+        keyFactorsCard.classList.remove('hidden');
+
+    </script>
+</body>
+</html>
+

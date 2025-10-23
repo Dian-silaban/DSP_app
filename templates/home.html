@@ -1,14 +1,130 @@
-<!-- templates/home.html -->
 {% extends "base.html" %}
-
-{% block title %}Home - Solid Web App{% endblock %}
+{% block title %}Home - DSP Attrition App{% endblock %}
 
 {% block content %}
-<h1>Selamat Datang di DSP Attrition App</h1>
-<p>Ini adalah halaman utama aplikasi analitik prediksi attrition.</p>
+<div class="glass-wrapper">
+  <div class="glass-card">
+    <h1 class="title">Selamat Datang di DSP Attrition App</h1>
+    <p class="subtitle">
+      Aplikasi analitik untuk memprediksi kemungkinan attrition karyawan.
+    </p>
 
-<div class="dashboard-container">
-    <p>Gunakan menu di atas untuk menuju Dashboard Analitik.</p>
+    <div class="button-group">
+      <a href="{{ url_for('dashboard') }}" class="glass-btn">Buka Dashboard</a>
+      <a href="{{ url_for('dashboard_view') }}" class="glass-btn">Lihat Laporan Analitik</a>
+    </div>
+  </div>
 </div>
+
+<style>
+  /* ===== Font (Opsional, tapi cocok dengan tema) ===== */
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+  /* ===== Latar Belakang Soft Purple ===== */
+  body {
+    margin: 0;
+    height: 100vh;
+    /* Gradien ungu lembut (lavender ke lilac) */
+    background: linear-gradient(135deg, #8a6fbf 0%, #5a3a8a 100%);
+    font-family: 'Inter', sans-serif;
+    color: #f0e8ff; /* Warna teks default (putih lavender) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* ===== Wrapper ===== */
+  .glass-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+
+  /* ===== Card (Efek Kaca + Glow Ungu) ===== */
+  .glass-card {
+    /* Latar kaca standar (sedikit transparan) */
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Border putih transparan */
+    border-radius: 16px;
+    padding: 3rem 4rem;
+    /* Shadow untuk efek glow ungu lembut */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1),
+                0 0 25px rgba(220, 192, 248, 0.15) inset,
+                0 0 20px rgba(220, 192, 248, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    text-align: center;
+    transition: all 0.4s ease;
+  }
+
+  .glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.2),
+                0 0 35px rgba(220, 192, 248, 0.25) inset,
+                0 0 30px rgba(220, 192, 248, 0.2);
+  }
+
+  /* ===== Judul & Subjudul ===== */
+  .title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 0.8rem;
+    color: #fff;
+    /* Efek glow pada teks (ungu lembut) */
+    text-shadow: 0 0 8px rgba(220, 192, 248, 0.7);
+  }
+
+  .subtitle {
+    font-size: 1.1rem;
+    color: #e0d8f0; /* Lavender pucat */
+    margin-bottom: 2rem;
+  }
+
+  /* ===== Tombol ===== */
+  .button-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .glass-btn {
+    display: inline-block;
+    width: 220px;
+    padding: 12px 30px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #e6e0ff; /* Warna teks lavender */
+    border: 2px solid #d4c0f8; /* Border ungu lembut */
+    background: transparent;
+    text-transform: uppercase;
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+    /* Glow awal untuk tombol */
+    box-shadow: 0 0 10px rgba(212, 192, 248, 0.3);
+  }
+
+  .glass-btn:hover {
+    transform: scale(1.05);
+    background: #d4c0f8; /* Latar terisi warna ungu lembut */
+    color: #3f2b96; /* Teks menjadi warna ungu tua */
+    /* Efek glow lebih kuat saat hover */
+    box-shadow: 0 0 25px rgba(212, 192, 248, 0.8),
+                0 0 50px rgba(212, 192, 248, 0.4);
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 640px) {
+    .glass-card {
+      padding: 2rem;
+      width: 90%;
+    }
+    .title {
+      font-size: 1.8rem;
+    }
+  }
+</style>
 {% endblock %}
-<!-- End of file: templates/home.html -->
